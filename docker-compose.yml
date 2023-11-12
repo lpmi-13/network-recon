@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+
+  first:
+    container_name: ssh-1
+    build:
+      context: .
+      dockerfile: Dockerfile-1
+    ports:
+      - "3000:22"
+    networks:
+      - network-a
+
+  second:
+    container_name: ssh-2
+    build:
+      context: .
+      dockerfile: Dockerfile-2
+    expose:
+      - "22/tcp"
+    networks:
+      - network-a
+      - network-b
+
+  third:
+    container_name: ssh-3
+    build:
+      context: .
+      dockerfile: Dockerfile-3
+    expose:
+      - "22/tcp"
+    networks:
+      - network-b
+
+networks:
+    network-a:
+      name: network-a
+      driver: bridge
+      ipam:
+        driver: default
+        config:
+          - subnet: 172.20.100.0/24
+
+    network-b:
+      name: network-b
+      driver: bridge
+      ipam:
+        driver: default
+        config:
+          - subnet: 10.10.8.0/24

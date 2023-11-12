@@ -1,0 +1,17 @@
+FROM ubuntu:22.04
+
+RUN apt update -y && apt install -y openssh-server netcat net-tools nmap
+
+# Configure SSH
+RUN mkdir /var/run/sshd
+
+RUN useradd -d /home/wario -p password wario
+
+RUN echo "FOUND ME" >> /tmp/flag
+
+#password for user login
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+EXPOSE 22
+
+# Start SSH server
+CMD ["/usr/sbin/sshd", "-D"]

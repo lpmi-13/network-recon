@@ -1,0 +1,20 @@
+FROM ubuntu:22.04
+
+RUN apt update -y && apt install -y openssh-server netcat net-tools nmap
+
+# Configure SSH
+RUN mkdir /var/run/sshd
+
+RUN useradd -d /home/wario -p password wario \
+    && useradd -d /home/alice -p password alice
+
+RUN mkdir ~alice/.ssh && chown -R alice:alice ~alice/.ssh
+
+RUN echo "AllowUsers alice" >> /etc/ssh/sshd_config
+
+#password for user login
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+EXPOSE 22
+
+# Start SSH server
+CMD ["/usr/sbin/sshd", "-D"]
