@@ -25,7 +25,5 @@ USER root
 
 RUN sed -i 's/#Port 22/Port 9001/' /etc/ssh/sshd_config
 
-EXPOSE 9001
-
 # Start SSH server
 CMD ["/usr/sbin/sshd", "-D"]
