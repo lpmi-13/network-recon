@@ -7,8 +7,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-1
-    ports:
-      - "3000:22"
     networks:
       - network-a
 
@@ -17,8 +15,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-2
-    expose:
-      - "2022/tcp"
     networks:
       - network-a
       - network-b
@@ -28,8 +24,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-3
-    expose:
-      - "22/tcp"
     networks:
       - network-b
 
