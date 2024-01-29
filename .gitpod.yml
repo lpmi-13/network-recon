@@ -2,6 +2,10 @@ tasks:
   - name: start the containers
     init: ./setup.sh
     command: docker-compose up -d --build
+  - name: wait for containers
+    init: until (nc -vz $(docker inspect $(docker ps | grep first | awk '{print $1}') | jq -r '.. | ."IPAddress"? | select(. != null and . != "")') 22 > /dev/null); do sleep 1; clear; echo "Waiting for the containers to start up...when they're ready, the terminal window will become available..."; done
+    command: echo "let's start the investigation!"
+    openMode: tab-after
   - name: delete the evidence
     # no idea if this is long enough to start up the docker-compose, but let's find out!
     command: sleep 5 && rm docker-compose.yml Dockerfile-* *.sh && exit
