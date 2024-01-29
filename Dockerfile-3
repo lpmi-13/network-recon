@@ -1,17 +1,31 @@
 FROM ubuntu:22.04
 
-RUN apt update -y && apt install -y openssh-server netcat net-tools nmap
+RUN apt update -y && apt install -y \
+  openssh-server
 
 # Configure SSH
 RUN mkdir /var/run/sshd
 
-RUN useradd -d /home/wario -p password wario
+RUN useradd -m bigbird && mkdir /home/bigbird/.ssh
 
-RUN echo "FOUND ME" >> /tmp/flag
+COPY ./more-generated-keys/key-3.pub /home/bigbird/.ssh/authorized_keys
 
-#password for user login
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-EXPOSE 22
+RUN chown bigbird:bigbird /home/bigbird/.ssh/authorized_keys && \
+  chown bigbird:bigbird /home/bigbird/.ssh && \
+  chmod 700 /home/bigbird/.ssh && \
+  chmod 600 /home/bigbird/.ssh/authorized_keys
+
+RUN echo "FOUND ME" >> /home/bigbird/flag.txt
+
+USER bigbird
+
+RUN ssh-keygen -A
+
+USER root
+
+RUN sed -i 's/#Port 22/Port 9001/' /etc/ssh/sshd_config
+
+EXPOSE 9001
 
 # Start SSH server
 CMD ["/usr/sbin/sshd", "-D"]

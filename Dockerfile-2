@@ -1,20 +1,40 @@
 FROM ubuntu:22.04
 
-RUN apt update -y && apt install -y openssh-server netcat net-tools nmap
+RUN apt update -y && apt install -y \
+  openssh-server \
+  netcat \
+  net-tools \
+  nmap
 
 # Configure SSH
 RUN mkdir /var/run/sshd
 
-RUN useradd -d /home/wario -p password wario \
-    && useradd -d /home/alice -p password alice
+RUN useradd -m wario && mkdir /home/wario/.ssh
 
-RUN mkdir ~alice/.ssh && chown -R alice:alice ~alice/.ssh
+# Copy the SSH keys into the container
+COPY ./more-generated-keys/key-1 /home/wario/.ssh/
+COPY ./more-generated-keys/key-2 /home/wario/.ssh/
+COPY ./more-generated-keys/key-3 /home/wario/.ssh/
 
-RUN echo "AllowUsers alice" >> /etc/ssh/sshd_config
+COPY ./generated-keys/key-2.pub /home/wario/.ssh/authorized_keys
 
-#password for user login
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-EXPOSE 22
+RUN chown wario:wario /home/wario/.ssh/authorized_keys && \
+  chown wario:wario -R /home/wario/.ssh && \
+  chmod 700 /home/wario/.ssh && \
+  chmod 600 /home/wario/.ssh/authorized_keys
+
+RUN echo "bert\nbigbird\ncookiemonster" >> /home/wario/users.txt
+RUN echo "meWantCookie\n3rn13\nSnuffie" >> /home/wario/passwords.txt
+
+USER wario
+
+RUN ssh-keygen -A
+
+USER root
+
+RUN sed -i 's/#Port 22/Port 2022/' /etc/ssh/sshd_config
+
+EXPOSE 2022
 
 # Start SSH server
 CMD ["/usr/sbin/sshd", "-D"]

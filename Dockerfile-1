@@ -1,18 +1,34 @@
-FROM ubuntu:22.04
+FROM ubuntu:latest
 
-RUN apt update -y && apt install -y openssh-server netcat net-tools nmap
+# Install SSH and nmap
+RUN apt-get update && apt-get install -y \
+  openssh-client \
+  nmap \
+  net-tools \
+  netcat
 
-# Configure SSH
-RUN mkdir /var/run/sshd
-RUN echo 'root:initial' | chpasswd
+# Create a directory to store the SSH keys in the container
+RUN useradd -m alice && mkdir /home/alice/.ssh
 
-RUN useradd -d /home/alice -p password alice \
-  && useradd -d /home/bob -p password bob \
-  && useradd -d /home/patrick -p password patrick
+# Copy the SSH keys into the container
+COPY ./generated-keys/key-1 /home/alice/.ssh/
+COPY ./generated-keys/key-2 /home/alice/.ssh/
+COPY ./generated-keys/key-3 /home/alice/.ssh/
 
-#password for user login
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-EXPOSE 22
+# Set the appropriate permissions for the SSH folder and keys
+RUN chmod 700 /home/alice/.ssh
+RUN chmod 600 /home/alice/.ssh/key*
 
-# Start SSH server
-CMD ["/usr/sbin/sshd", "-D"]
+RUN chown -R alice:alice /home/alice/.ssh
+
+# Let the user run nmap without sudo
+RUN chown alice:alice $(which nmap)
+
+USER alice
+
+WORKDIR /home/alice
+
+RUN echo "mario\nluigi\nwario" >> users.txt
+
+# Set the default command for the container
+CMD ["/bin/bash", "-c", "sleep 3600"]
