@@ -2,6 +2,16 @@
 
 This is a simple micromaterial to practice the steps involved in lateral movement through a network involving reconnaisance inside a host and using `nmap` to enumerate the network.
 
+## Running locally
+
+Though this is intended to run in gitpod, if you wanna try it out locally, just make sure to run `./setup.sh` before you start. This will configure the different ssh keys and randomize the subnets you'll be traversing.
+
+To enter the first container, you can exec in using
+
+```sh
+docker exec -it $(docker ps | grep first | awk '{print $1}') /bin/bash
+```
+
 ## Jump into the first container
 
 (When this is set to run in GitPod, we'll probably just start by sending the user directly into the first container).
