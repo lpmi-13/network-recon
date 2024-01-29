@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-RUN apt update -y && apt install -y \
+RUN apt update && apt install -y \
   openssh-server
 
 # Configure SSH
@@ -10,8 +10,7 @@ RUN useradd -m bigbird -s /bin/bash && mkdir /home/bigbird/.ssh
 
 COPY ./more-generated-keys/key-3.pub /home/bigbird/.ssh/authorized_keys
 
-RUN chown bigbird:bigbird /home/bigbird/.ssh/authorized_keys && \
-  chown bigbird:bigbird /home/bigbird/.ssh && \
+RUN chown bigbird:bigbird -R /home/bigbird/.ssh && \
   chmod 700 /home/bigbird/.ssh && \
   chmod 600 /home/bigbird/.ssh/authorized_keys
 

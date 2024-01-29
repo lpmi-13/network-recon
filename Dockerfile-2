@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-RUN apt update -y && apt install -y \
+RUN apt update && apt install -y \
   openssh-server \
   netcat \
   net-tools \
@@ -9,24 +9,23 @@ RUN apt update -y && apt install -y \
 # Configure SSH
 RUN mkdir /var/run/sshd
 
-RUN useradd -m wario -s /bin/bash && mkdir /home/wario/.ssh
+RUN useradd -m moana -s /bin/bash && mkdir /home/moana/.ssh
 
 # Copy the SSH keys into the container
-COPY ./more-generated-keys/key-1 /home/wario/.ssh/
-COPY ./more-generated-keys/key-2 /home/wario/.ssh/
-COPY ./more-generated-keys/key-3 /home/wario/.ssh/
+COPY ./more-generated-keys/key-1 /home/moana/.ssh/
+COPY ./more-generated-keys/key-2 /home/moana/.ssh/
+COPY ./more-generated-keys/key-3 /home/moana/.ssh/
 
-COPY ./generated-keys/key-2.pub /home/wario/.ssh/authorized_keys
+COPY ./generated-keys/key-2.pub /home/moana/.ssh/authorized_keys
 
-RUN chown wario:wario /home/wario/.ssh/authorized_keys && \
-  chown wario:wario -R /home/wario/.ssh && \
-  chmod 700 /home/wario/.ssh && \
-  chmod 600 /home/wario/.ssh/authorized_keys
+RUN chown moana:moana -R /home/moana/.ssh && \
+  chmod 700 /home/moana/.ssh && \
+  chmod 600 /home/moana/.ssh/authorized_keys
 
-RUN echo "bert\nbigbird\ncookiemonster" >> /home/wario/users.txt
-RUN echo "meWantCookie\n3rn13\nSnuffie" >> /home/wario/passwords.txt
+RUN echo "bert\nbigbird\ncookiemonster" >> /home/moana/users.txt
+RUN echo "meWantCookie\n3rn13\nSnuffie" >> /home/moana/passwords.txt
 
-USER wario
+USER moana
 
 RUN ssh-keygen -A
 

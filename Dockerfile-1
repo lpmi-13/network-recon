@@ -1,11 +1,13 @@
-FROM ubuntu:latest
+FROM ubuntu:22.04
 
-# Install SSH and nmap
-RUN apt-get update && apt-get install -y \
-  openssh-client \
-  nmap \
+RUN apt update && apt install -y \
+  openssh-server \
+  netcat \
   net-tools \
-  netcat
+  nmap
+
+# Configure SSH
+RUN mkdir /var/run/sshd
 
 # Create a directory to store the SSH keys in the container
 RUN useradd -m alice -s /bin/bash && mkdir /home/alice/.ssh
@@ -14,6 +16,9 @@ RUN useradd -m alice -s /bin/bash && mkdir /home/alice/.ssh
 COPY ./generated-keys/key-1 /home/alice/.ssh/
 COPY ./generated-keys/key-2 /home/alice/.ssh/
 COPY ./generated-keys/key-3 /home/alice/.ssh/
+
+# Copy in the initial key
+COPY ./initial-key.pub /home/alice/.ssh/authorized_keys
 
 # Set the appropriate permissions for the SSH folder and keys
 RUN chmod 700 /home/alice/.ssh
@@ -25,9 +30,11 @@ RUN chown alice:alice $(which nmap)
 
 USER alice
 
-WORKDIR /home/alice
+RUN ssh-keygen -A
 
-RUN echo "mario\nluigi\nwario" >> users.txt
+USER root
 
-# Set the default command for the container
-CMD ["/bin/bash", "-c", "sleep 3600"]
+RUN echo "ariel\njasmine\nmoana" >> /home/alice/users.txt
+
+# Start SSH server
+CMD ["/usr/sbin/sshd", "-D"]

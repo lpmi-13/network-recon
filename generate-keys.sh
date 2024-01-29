@@ -1,3 +1,10 @@
+if ! [ -f initial-key.pub ]; then
+  ssh-keygen -t ed25519 -o -a 100 -f ./initial-key -N ""
+else
+  rm initial-key*
+  ssh-keygen -t ed25519 -o -a 100 -f ./initial-key -N ""
+fi
+
 if [ ! -d ./generated-keys ]; then
     mkdir generated-keys
 else
