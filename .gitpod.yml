@@ -4,8 +4,8 @@ tasks:
     command: docker-compose up -d --build
   - name: wait for containers
     # this is so hashtag delicious
-    init: until (( $(docker ps -q | wc -l) == 3 )); do sleep 1; clear; echo "Waiting for the containers to start up...when they're ready, the browser window will open above..."; done
-    command: echo "let's start the recon!"
+    init: until (( $(docker ps -q | wc -l) == 3 )); do sleep 1; clear; echo "Waiting for the containers to start up...when they're ready, you'll be ssh'ed into the first container..."; done
+    command: ssh -i initial-key alice@$(docker inspect $(docker ps | grep first | awk '{print $1}') | jq -r '.. | ."IPAddress"? | select(. != null and . != "")')
     openMode: tab-after
   - name: delete the evidence
     # no idea if this is long enough to start up the docker-compose, but let's find out!
