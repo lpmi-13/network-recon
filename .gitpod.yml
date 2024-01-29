@@ -1,7 +1,7 @@
 tasks:
   - name: start the containers
     init: ./setup.sh
-    command: docker-compose up -d --build
+    command: docker-compose up -d --build && exit
   - name: wait for containers
     # this is so hashtag delicious
     init: until (( $(docker ps -q | wc -l) == 3 )); do sleep 1; clear; echo "Waiting for the containers to start up...when they're ready, you'll be ssh'ed into the first container..."; done
