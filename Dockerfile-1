@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
   netcat
 
 # Create a directory to store the SSH keys in the container
-RUN useradd -m alice && mkdir /home/alice/.ssh
+RUN useradd -m alice -s /bin/bash && mkdir /home/alice/.ssh
 
 # Copy the SSH keys into the container
 COPY ./generated-keys/key-1 /home/alice/.ssh/
@@ -18,7 +18,6 @@ COPY ./generated-keys/key-3 /home/alice/.ssh/
 # Set the appropriate permissions for the SSH folder and keys
 RUN chmod 700 /home/alice/.ssh
 RUN chmod 600 /home/alice/.ssh/key*
-
 RUN chown -R alice:alice /home/alice/.ssh
 
 # Let the user run nmap without sudo

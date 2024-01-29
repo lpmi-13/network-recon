@@ -9,7 +9,7 @@ RUN apt update -y && apt install -y \
 # Configure SSH
 RUN mkdir /var/run/sshd
 
-RUN useradd -m wario && mkdir /home/wario/.ssh
+RUN useradd -m wario -s /bin/bash && mkdir /home/wario/.ssh
 
 # Copy the SSH keys into the container
 COPY ./more-generated-keys/key-1 /home/wario/.ssh/

@@ -6,7 +6,7 @@ RUN apt update -y && apt install -y \
 # Configure SSH
 RUN mkdir /var/run/sshd
 
-RUN useradd -m bigbird && mkdir /home/bigbird/.ssh
+RUN useradd -m bigbird -s /bin/bash && mkdir /home/bigbird/.ssh
 
 COPY ./more-generated-keys/key-3.pub /home/bigbird/.ssh/authorized_keys
 
