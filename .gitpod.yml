@@ -1,0 +1,7 @@
+tasks:
+  - name: start the containers
+    init: ./setup.sh
+    command: docker-compose up -d --build
+  - name: delete the evidence
+    # no idea if this is long enough to start up the docker-compose, but let's find out!
+    command: sleep 5 && rm docker-compose.yml Dockerfile-* *.sh && exit
