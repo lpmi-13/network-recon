@@ -6,10 +6,10 @@ This is a simple micromaterial to practice the steps involved in lateral movemen
 
 Though this is intended to run in gitpod, if you wanna try it out locally, just make sure to run `./setup.sh` before you start. This will configure the different ssh keys and randomize the subnets you'll be traversing.
 
-To enter the first container, you can exec in using
+To enter the first container, you can connect via the following command:
 
 ```sh
-docker exec -it $(docker ps | grep first | awk '{print $1}') /bin/bash
+ssh -i initial-key alice@$(docker inspect $(docker ps | grep first | awk '{print $1}') | jq -r '.. | ."IPAddress"? | select(. != null and . != "")')
 ```
 
 ## Jump into the first container
@@ -20,7 +20,7 @@ Run some local reconnaisance with `ifconfig` to see what network you're on.
 
 Then once you know where you are, run a scan with `nmap` to see what other hosts you can contact, and which ones are running SSH.
 
-```
+```sh
 nmap -sV IP_ADDRESS_OF_THE_NETWORK/CIDR (probably a /24)
 ```
 
