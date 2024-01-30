@@ -21,9 +21,9 @@ COPY ./generated-keys/key-* /home/alice/.ssh/
 COPY ./initial-key.pub /home/alice/.ssh/authorized_keys
 
 # Set the appropriate permissions for the SSH folder and keys
-RUN chmod 700 /home/alice/.ssh
-RUN chmod 600 /home/alice/.ssh/key*
-RUN chown -R alice:alice /home/alice/.ssh
+RUN chmod 700 /home/alice/.ssh \
+  && chmod 600 /home/alice/.ssh/key* \
+  && chown -R alice:alice /home/alice/.ssh
 
 # Let the user run nmap without sudo
 RUN chown alice:alice /usr/bin/nmap

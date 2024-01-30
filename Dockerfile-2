@@ -22,8 +22,8 @@ RUN chown moana:moana -R /home/moana/.ssh && \
   chmod 700 /home/moana/.ssh && \
   chmod 600 /home/moana/.ssh/authorized_keys
 
-RUN echo "bert\nbigbird\ncookiemonster" >> /home/moana/users.txt
-RUN echo "meWantCookie\n3rn13\nSnuffie" >> /home/moana/passwords.txt
+RUN echo "bert\nbigbird\ncookiemonster" >> /home/moana/users.txt \
+  && echo "meWantCookie\n3rn13\nSnuffie" >> /home/moana/passwords.txt
 
 USER moana
 
