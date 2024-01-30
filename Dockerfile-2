@@ -4,6 +4,7 @@ RUN apt update && apt install -y --no-install-recommends \
   openssh-server
 
 RUN apt install -y --no-install-recommends \
+  iproute2 \
   netcat \
   net-tools \
   nmap
