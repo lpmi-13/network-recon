@@ -28,8 +28,10 @@ Run some local reconnaisance with `ifconfig` to see what network you're on.
 Then once you know where you are, run a scan with `nmap` to see what other hosts you can contact, and which ones are running SSH.
 
 ```sh
-nmap -sV IP_ADDRESS_OF_THE_NETWORK/CIDR (probably a /24)
+nmap -p- -sV IP_ADDRESS_OF_THE_NETWORK/CIDR (probably a /24)
 ```
+
+> the `-p-` part of the `nmap` command means "scan all ports" (0-65535), and since the SSH servers are not necessarily running on common ports, we'll need to make sure we find them.
 
 ## Running locally
 
