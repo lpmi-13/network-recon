@@ -1,7 +1,9 @@
 FROM ubuntu:22.04
 
-RUN apt update && apt install -y \
-  openssh-server \
+RUN apt update && apt install -y --no-install-recommends \
+  openssh-server
+
+RUN apt install -y --no-install-recommends \
   netcat \
   net-tools \
   nmap
@@ -13,9 +15,7 @@ RUN mkdir /var/run/sshd
 RUN useradd -m alice -s /bin/bash && mkdir /home/alice/.ssh
 
 # Copy the SSH keys into the container
-COPY ./generated-keys/key-1 /home/alice/.ssh/
-COPY ./generated-keys/key-2 /home/alice/.ssh/
-COPY ./generated-keys/key-3 /home/alice/.ssh/
+COPY ./generated-keys/key-* /home/alice/.ssh/
 
 # Copy in the initial key
 COPY ./initial-key.pub /home/alice/.ssh/authorized_keys

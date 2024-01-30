@@ -1,7 +1,9 @@
 FROM ubuntu:22.04
 
-RUN apt update && apt install -y \
-  openssh-server \
+RUN apt update && apt install -y --no-install-recommends \
+  openssh-server
+
+RUN apt install -y --no-install-recommends \
   netcat \
   net-tools \
   nmap
@@ -12,9 +14,7 @@ RUN mkdir /var/run/sshd
 RUN useradd -m moana -s /bin/bash && mkdir /home/moana/.ssh
 
 # Copy the SSH keys into the container
-COPY ./more-generated-keys/key-1 /home/moana/.ssh/
-COPY ./more-generated-keys/key-2 /home/moana/.ssh/
-COPY ./more-generated-keys/key-3 /home/moana/.ssh/
+COPY ./more-generated-keys/key-* /home/moana/.ssh/
 
 COPY ./generated-keys/key-2.pub /home/moana/.ssh/authorized_keys
 
