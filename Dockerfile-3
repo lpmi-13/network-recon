@@ -22,7 +22,8 @@ RUN ssh-keygen -A
 
 USER root
 
-RUN sed -i 's/#Port 22/Port 9001/' /etc/ssh/sshd_config
+# This port number will be overwritten during setup to a random value
+RUN sed -i 's/#Port 22/Port SECOND_PORT/' /etc/ssh/sshd_config
 
 # Start SSH server
 CMD ["/usr/sbin/sshd", "-D"]
