@@ -11,7 +11,7 @@ This is intended to run entirely in gitpod, so please run it there for the smoot
 
 ## Network architecture
 
-You'll start in a container that's running in Subnet A without any access to Subnet B. The flag is in a container running in Subnet B, so figure out how to get over there.
+You'll start in a container that's running in Subnet A without any access to Subnet B. The flag is in a container running in Subnet B, so figure out how to get over there (it's in the home directory, so as soon as you SSH in, you'll see it).
 
 > you could technically exit the ssh session from the first container and then `docker exec` into the last container, but where's the fun in that?!?!
 
